@@ -1,0 +1,26 @@
+[tool.poetry]
+name = "superman-visualizations"
+version = "0.1.0"
+description = ""
+authors = ["MarcusYim"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+numpy = "^2.2"
+matplotlib = "^3.10.3"
+
+[tool.poetry.group.dev.dependencies]
+mypy = "^1.16.1"
+black = "^25.1.0"
+ruff = "^0.12.3"
+pre-commit = "^4.2.0"
+pytest = "^8.4.1"
+sphinx = "^8.2.3"
+nbsphinx = "^0.9"
+pytest-cov = "^6.2.1"
+pypandoc = "^1.8.8"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
