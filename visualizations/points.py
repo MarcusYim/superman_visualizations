@@ -1,4 +1,4 @@
-from typing import Optional, Tuple
+from typing import Optional, Sequence, Tuple
 from matplotlib.axes import Axes
 from matplotlib.collections import PathCollection
 from matplotlib.figure import Figure
@@ -9,6 +9,7 @@ def plot_points(
     fig: Figure,
     points: np.ndarray,
     i_param: Optional[np.ndarray] = None,
+    use_dims: Optional[Sequence[int]] = None,
     size: float = 10.0,
 ) -> Tuple[PathCollection, Axes]:
     """
@@ -17,24 +18,29 @@ def plot_points(
     :param fig: Matplotlib Figure object where the scatter plot will be drawn.
     :param points: Array of shape (n_points, 2) or (n_points, 3) containing the coordinates of each point.
     :param i_param: Optional array of intrinsic parameters to color the plot with. (default: None).
+    :param use_dims: Optional sequence of dimensions to plot. If None, plots all dimensions. (default: None).
     :param size: Marker size for each point in the scatter plot. (default: 10).
 
     :return: The PathCollection object for the scatter plot.
     """
-    dim = points.shape[1]
+    if use_dims is None:
+        use_dims = range(points.shape[1])
 
-    if dim not in (2, 3):
+    if len(use_dims) not in (2, 3):
         raise ValueError(
-            f"Points dimension {points.shape[1]}, expected dimension 2 or 3!"
+            f"Points dimension {len(use_dims)}, expected dimension 2 or 3!"
         )
 
-    projection = "3d" if dim == 3 else None
+    projection = "3d" if len(use_dims) == 3 else None
     ax = fig.add_subplot(111, projection=projection)
 
-    if dim == 2:
-        sc = ax.scatter(points[:, 0], points[:, 1], c=i_param, s=size)
-    else:  # 3D
-        sc = ax.scatter(points[:, 0], points[:, 1], points[:, 2], c=i_param)
+    point_arrs = (
+        points[:, use_dims[0]],
+        points[:, use_dims[1]],
+        size if len(use_dims) == 2 else points[:, use_dims[2]],
+    )
+
+    sc = ax.scatter(*point_arrs, c=i_param)
 
     if i_param is not None:
         fig.colorbar(sc, ax=ax, label="intrinsic parameter")
