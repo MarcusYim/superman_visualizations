@@ -21,7 +21,7 @@ def plot_points(
     :param use_dims: Optional sequence of dimensions to plot. If None, plots all dimensions. (default: None).
     :param size: Marker size for each point in the scatter plot. (default: 10).
 
-    :return: The PathCollection object for the scatter plot.
+    :return: A Tuple of PathCollection and Axes objects for the scatter plot.
     """
     if use_dims is None:
         use_dims = range(points.shape[1])
