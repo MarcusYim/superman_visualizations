@@ -6,7 +6,7 @@ import numpy as np
 
 
 def plot_points(
-    fig: Figure,
+    gr: Figure | Axes,
     points: np.ndarray,
     i_param: Optional[np.ndarray] = None,
     use_dims: Optional[Sequence[int]] = None,
@@ -32,7 +32,7 @@ def plot_points(
         )
 
     projection = "3d" if len(use_dims) == 3 else None
-    ax = fig.add_subplot(111, projection=projection)
+    ax = gr.add_subplot(111, projection=projection) if isinstance(gr, Figure) else gr
 
     point_arrs = (
         points[:, use_dims[0]],
@@ -42,7 +42,7 @@ def plot_points(
 
     sc = ax.scatter(*point_arrs, c=i_param)
 
-    if i_param is not None:
-        fig.colorbar(sc, ax=ax, label="intrinsic parameter")
+    if i_param is not None and isinstance(gr, Figure):
+        gr.colorbar(sc, ax=ax, label="intrinsic parameter")
 
     return sc, ax
